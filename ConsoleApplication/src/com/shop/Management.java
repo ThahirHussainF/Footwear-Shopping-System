@@ -1,11 +1,12 @@
+/*
+ * 
+ */
 package com.shop;
 
 import java.util.Scanner;
 
 public class Management {
 	public Management() {
-		
-		
 		boolean exit = true;
 		do {
 			int choice;

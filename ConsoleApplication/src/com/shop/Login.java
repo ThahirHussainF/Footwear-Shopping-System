@@ -7,11 +7,13 @@ import java.util.regex.Pattern;
 class Login {
 	private String username = "";
 	private String password = "";
-	public String user;
+	private String user;
+	private int count=0;
 	private int set;
 	Accounts account = new Accounts();
+    
 
-	public boolean isValid(String regex, String credential) {
+	public static boolean isValid(String regex, String credential) {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(credential);
 		return matcher.matches();
@@ -66,7 +68,7 @@ class Login {
 					username = ob.next();
 					String regex = "^(?=.*[0-9])" + "(?=.*[a-z])" + "(?=.*[A-Z]).{5,8}$";
 					if (isValid(regex, username)) {
-						if (checknewOrAlreadyExistingUser(regex, username)) {
+						if (checknewOrAlreadyExistingUser(user, username)) {
 							System.out.println("Already exists!");
 							continue;
 						} else {
@@ -84,7 +86,7 @@ class Login {
 					System.out.println("\nEnter the password: ");
 					password = ob.next();
 					String regex = "^(?=.*[0-9])" + "(?=.*[a-z])(?=.*[A-Z])" + "(?=.*[@#$%^&+=])" + "(?=\\S+$).{8,20}$";
-					if (!this.isValid(regex, password)) {
+					if (!isValid(regex, password)) {
 						System.out.println("Invalid Password format!.Try Again");
 						continue;
 					}
@@ -108,7 +110,7 @@ class Login {
 					password = ob.next();
 					if (account.checkValidUser(user, username, password)) {
 						System.out.println("Login successfully!");
-						Home home=new Home(user,username);
+						Home home=new Home(user,username,account);
 						
 						set = 1;
 						break;

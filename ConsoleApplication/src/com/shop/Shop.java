@@ -20,6 +20,7 @@ public class Shop {
 		for (Category value : Category.values()) {
 			categoryMap.put(value, new ArrayList<Product>());
 		}
+		
 		Date date=new Date();
 		this.shopId="BS"+(date.getYear()+1900)+"SHOP"+id++;
 	}
@@ -147,15 +148,18 @@ public class Shop {
 	public Seller getSeller() {
 		return seller;
 	}
+	public Seller getSeller(String shopId) {
+		return seller;
+	}
 
 	public void setSeller(Seller seller) {
 		this.seller = seller;
 	}
 
 	public String toString() {
-    	return "\nShop ID: "+this.shopId+"\nShop Name: "+this.shopName+"\nSeller Name: "+this.ownerName+"\nSeller ID: "+
+    	return "\n*****************Shop Details*****************\n"+"\nShop ID: "+this.shopId+"\nShop Name: "+this.shopName+"\nSeller Name: "+this.ownerName+"\nSeller ID: "+
                this.seller.getSellerID()+"\nShop Status: "+this.shopStatus+"(0->Not yet approved, 1-> Approved, 2->Denied)"+
-    			"\nSeller Details"+this.seller.toString();
+    			"\n*****************Seller Details*****************\n"+this.seller.toString();
     }
 	
 }

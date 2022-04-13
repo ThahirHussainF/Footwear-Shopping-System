@@ -2,8 +2,8 @@ package com.shop;
 
 public class Home {
     private String user;
-    Accounts account=new Accounts();
-    public Home(String user,String username) {
+    Notification notification=new Notification();
+    public Home(String user,String username,Accounts account) {
     	switch(user) {
     	case "customer":
     		//on progress
@@ -11,7 +11,7 @@ public class Home {
     	case "seller":
     		for(Seller seller:account.sellers) {
     			if(seller.getUserName().equals(username)) {
-    				seller.menu();
+    				seller.menu(notification);
     				break;
     			}
     		}
@@ -19,7 +19,7 @@ public class Home {
     	case "admin":
     		for(Admin admin:account.admins) {
     			if(admin.getUsername().equals(username)) {
-    				admin.menu();
+    				admin.menu(notification);
     				break;
     			}
     		}

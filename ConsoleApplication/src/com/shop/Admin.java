@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class Admin extends User {
 	private String username;
@@ -16,18 +17,17 @@ public class Admin extends User {
 	static Queue<Shop> approvalQueueforCreatingShop = new LinkedList<>();
 	static Queue<String> approvalQueueforDeletingShop = new LinkedList<>();
 	Scanner ob = new Scanner(System.in);
-
 	public Admin() {
 		Date date = new Date();
 		this.adminId = "BS" + (date.getYear() + 1900) + "A" + id++;
+		Notification.adminNotifications.put(this.getAdminId(),new Stack<String>());
 	}
-
-	public void menu() {
+	public void menu(Notification notification) {
 		boolean exit = true;
 		System.out.println("***************Home*********************");
 		do {
 			System.out.println(
-					"\n1.Approval for creating shop\n2.Approval for deleting shop\n3.Logout\nEnter your choice: ");
+					"\n1.Approval for creating shop\n2.Approval for deleting shop\n3.Notifications\n4.Logout\nEnter your choice: ");
 			int choice = ob.nextInt();
 			switch (choice) {
 			case 1:
@@ -37,6 +37,9 @@ public class Admin extends User {
 				this.approvalAndRejectionOperartionPerformedForDeletingShop();
 				break;
 			case 3:
+				notification.notificationMenu("admin",this.getAdminId());
+				break;
+			case 4:
 				exit = false;
 				break;
 			}
@@ -44,33 +47,60 @@ public class Admin extends User {
 		} while (exit);
 	}
 
-	public static void approvalOrRejectionOfShops(String sellerId, Shop shop) {
+	public static void approvalOrRejectionOfShops(Shop shop) {
 		approvalQueueforCreatingShop.add(shop);
-		shops.put(sellerId, shop);
+		
 	}
 
 	public void approvalAndRejectionOperartionPerformedForCreatingShop() {
+		if(this.approvalQueueforCreatingShop.isEmpty()) {
+			System.out.println("No shops were waiting for Creation!");
+			return;
+		}
 		System.out.println("Shops waiting for Creation:");
 		for (Shop shop : this.approvalQueueforCreatingShop) {
 			System.out.println(shop.toString());
 			System.out.println("\n1.Approval\n2.Denial\nEnter your status: ");
 			int status = ob.nextInt();
 			shop.setShopStatus(status);
-			System.out.println("Shop was created successfully!");
+			if(status==1) {
+				Notification.sellerNotifications.get(shop.getSeller().getSellerID()).add("Your shop was created sucessfully!");
+				System.out.println("Request was accepted!");
+			}
+			else
+			{
+				Notification.sellerNotifications.get(shop.getSeller().getSellerID()).add("Your shop creation request was denied!");
+				System.out.println("Request was denied!");
+			}
+	
 			this.approvalQueueforCreatingShop.remove();
 		}
 	}
 
 	public void approvalAndRejectionOperartionPerformedForDeletingShop() {
+		if(this.approvalQueueforDeletingShop.isEmpty()) {
+			System.out.println("No shops were waiting for Deletion!");
+			return;
+		}
 		System.out.println("Shops waiting for Deletion:");
 		for (String shopId : this.approvalQueueforDeletingShop) {
-			//on progress
-			System.out.println("\n1.Approval\n2.Denial\nEnter your status: ");
-			int status = ob.nextInt();
-			if (status == 1) {
-				
-				System.out.println("Shop was deleted successfully!");
-			}
+              for(Map.Entry<String, Shop> sellerWithShop:shops.entrySet()) {
+            	Shop shop=sellerWithShop.getValue();
+            	System.out.println(shop);
+            	System.out.println("\n1.Approval\n2.Denial\nEnter your status: ");
+      			int status = ob.nextInt();
+      			if(status==1) {
+      				shops.remove(sellerWithShop.getKey());
+    				Notification.sellerNotifications.get(shop.getSeller().getSellerID()).add("Your shop was deleted sucessfully!");
+    				System.out.println("Request was accepted!");
+    			}
+    			else
+    			{
+    				Notification.sellerNotifications.get(shop.getSeller().getSellerID()).add("Your shop deletion request was denied!");
+    				System.out.println("Request was denied!");
+    			}
+              }
+			
 			this.approvalQueueforDeletingShop.remove();
 		}
 	}
