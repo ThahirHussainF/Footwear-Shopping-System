@@ -1,36 +1,48 @@
+/*
+ * Application title : Online Footwear Shopping system
+ * Author            : F.Thahir Hussain
+ * Created on        : April 9 2022
+ * Last Modified date: April 18 2022
+ * Reviewed by       :
+ * Suggestions       :
+ */
 package com.shop;
 
 import java.util.Date;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Stack;
-
+//It is used to perform all operations for sellers
 public class Seller extends User {
-	static int id = 1;
+	static byte id = 1;
 	private String sellerID;
 	private String shopName;
 	private String shopAddress;
 	private String password;
 	private String userName;
-	private Shop myShop;
-	Scanner ob = new Scanner(System.in);
+	private Shop myShop;//It will store shop object for each seller.
+	Scanner scanner = new Scanner(System.in);
 	public Seller() {
-		System.out.println("Enter the shop name: ");
-		this.shopName = ob.nextLine();
-		System.out.println("Enter the shop address: ");
-		this.shopAddress = ob.nextLine();
+		//this.userDetails();
+//		System.out.println("Enter the shop name: ");
+//		this.shopName = scanner.nextLine();
+//		System.out.println("Enter the shop address: ");
+//		this.shopAddress = scanner.nextLine();
 		Date d = new Date();
 		this.sellerID = "BS" + (d.getYear() + 1900) + "S" + id++;
 		Notification.sellerNotifications.put(this.getSellerID(), new Stack<String>());
 	}
-
+	//It is used to show the menu for all operations related to Seller.
 	public void menu(Notification notification) {
 		boolean exit = true;
 		System.out.println("***************Home*********************");
 		do {
 			System.out.println(
-					"\n1.Creating my new Shop\n2.Check the status of my shop\n3.Deleting my Shop\n4.Notifications\n5.Logout\nEnter your choice: ");
-			int choice = ob.nextInt();
+					"\n1.Creating my new Shop\n2.Check the status of my shop"
+					+"\n3.Add the product\n4.update the product\n5.delete the product"
+					+ "\n6.Print the products\n7.Deleting my Shop"
+					+"\n8.Notifications\n9.Logout\nEnter your choice: ");
+			int choice = scanner.nextInt();
 			switch (choice) {
 			case 1:
 				this.createShop();
@@ -39,12 +51,24 @@ public class Seller extends User {
 				this.checkStatusOfTheShop();
 				break;
 			case 3:
-				this.deleteShop();
+				this.myShop.addProductToShop();;
 				break;
 			case 4:
-				notification.notificationMenu("seller",this.getSellerID());
+				this.myShop.updateProductToShop();
 				break;
 			case 5:
+				this.myShop.removeProductFromShop();
+				break;
+			case 6:
+				this.myShop.printProducts();;
+				break;
+			case 7:
+				this.deleteShop();
+				break;
+			case 8:
+				notification.notificationMenuForSeller(this.getSellerID());
+				break;
+			case 9:
 				exit = false;
 				break;
 			}
@@ -52,27 +76,27 @@ public class Seller extends User {
 		} while (exit);
 	}
 
-	
+	//It is used to create the shop for each seller object.
 	public void createShop() {
 		Shop shop = new Shop();
 		shop.setOwnerName(this.firstName + " " + this.lastName);
 		shop.setSeller(this);
 		shop.setShopName(shopName);
 		this.setMyShop(shop);
-		Admin.shops.put(this.getSellerID(), shop);
+		Accounts.shops.put(this.getSellerID(), shop);
 		Admin.approvalOrRejectionOfShops(shop);
 		System.out.println(this.myShop.toString());
 		System.out.println("please waiting for approval from admin...........");
 		
 	}
-
+	//It is used to create the shop for each seller object.
 	public void checkStatusOfTheShop() {
 		if (this.myShop == null) {
 			System.out.println("There is no shop linked with this account!");
 			return;
 		}
-		if (Admin.shops.containsKey(this.getSellerID())) {
-			Shop shop = Admin.shops.get(this.sellerID);
+		if (Accounts.shops.containsKey(this.getSellerID())) {
+			Shop shop = Accounts.shops.get(this.sellerID);
 			int status = shop.getShopStatus();
 			if (status == 0) {
 				System.out.println("Your shop was not yet approved!");
@@ -85,12 +109,12 @@ public class Seller extends User {
 			System.out.println("Your shop was not found!");
 		}
 	}
-
+	//It is used to delete the shop for each seller object.
 	public void deleteShop() {
 		System.out.println("Enter the shopId to delete");
-		String shopId = ob.next();
-		if (Admin.shops.containsKey(this.getSellerID())) {
-			if(Admin.shops.get(this.getSellerID()).getShopStatus()==0) {
+		String shopId = scanner.next();
+		if (Accounts.shops.containsKey(this.getSellerID())) {
+			if(Accounts.shops.get(this.getSellerID()).getShopStatus()==0) {
 				System.out.println("Your shop was not yet approved.You can't delete the shop.");
 				return;
 			}
@@ -101,67 +125,63 @@ public class Seller extends User {
 		}
 
 	}
-
+	public void addProduct() {
+		
+	}
+    //It is used to get the password from every seller object.
 	public String getPassword() {
 		return password;
 	}
-
+	//It is used to set the password to every seller object.
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	//It is used to set the password to every seller object.
 	public String getUserName() {
 		return userName;
 	}
-
+	//It is used to set the user name to every seller object.
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-
-	public static int getId() {
-		return id;
-	}
-
-	public static void setId(int id) {
-		Seller.id = id;
-	}
-
+	//It is used to get the seller Id from every seller object.
 	public String getSellerID() {
 		return sellerID;
 	}
-
+	//It is used to set the seller Id to every seller object.
 	public void setSellerID(String sellerID) {
 		this.sellerID = sellerID;
 	}
-
+    //It is used to get the shop name from every seller object.
 	public String getShopName() {
 		return shopName;
 	}
-
+	 //It is used to set the shop name to every seller object
 	public void setShopName(String shopName) {
 		this.shopName = shopName;
 	}
-
+	//It is used to get the shop address from every seller object.
 	public String getShopAddress() {
 		return shopAddress;
 	}
-
+	//It is used to set the shop address to every seller object.
 	public void setShopAddress(String shopAddress) {
 		this.shopAddress = shopAddress;
 	}
-
+	//I am using compile time polymorphism .
+    //It is used to get the shop object from every seller object
 	public Shop getMyShop() {
 		return myShop;
 	}
-
+	//It is used to get the shop object from every seller object
 	public Shop getMyShop(String sellerId) {
 		return myShop;
 	}
-
+	//It is used to set the shop object to every seller object
 	public void setMyShop(Shop myShop) {
 		this.myShop = myShop;
 	}
-
+	//It was used to print details whenever we print seller object.
 	public String toString() {
 		return "\nSeller Id: " + this.sellerID + "\nShop Name: " + this.shopName + "\nShop address: " + this.shopAddress
 				+ super.toString();

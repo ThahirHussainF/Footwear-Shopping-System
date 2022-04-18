@@ -1,32 +1,39 @@
 /*
- * 
+ * Application title : Online Footwear Shopping system
+ * Author            : F.Thahir Hussain
+ * Created on        : April 9 2022
+ * Last Modified date: April 18 2022
+ * Reviewed by       :
+ * Suggestions       :
  */
 package com.shop;
 
 import java.util.Scanner;
-
+//It is used to manage the login accounts for all users(customer, seller, admin)
 public class Management {
-	public Management() {
+	//This constructor is invoked to categorize the users(customer, seller and admin) 
+	public Management(Accounts account) {
 		boolean exit = true;
 		do {
 			int choice;
-			Scanner ob = new Scanner(System.in);
+			Scanner scanner = new Scanner(System.in);
 			System.out.println("****************************************************");
-			System.out.println("\nWelcome to Bismi Footwear Mart\n");
-			System.out.println("1.Customer\n2.Seller\n3.Admin\n4.Exit");
+			System.out.println("\nLOGIN\n");
+			System.out.println("1.Customer\n2.Seller\n3.Admin\n4.Exit\nEnter your choice:");
 			System.out.println("****************************************************");
-			choice = ob.nextInt();
+			choice = scanner.nextInt();
 			switch (choice) {
 			case 1:
-				new Login("customer");
+				new Login("customer",account);
 				break;
 			case 2:
-				new Login("seller");
+				new Login("seller",account);
 				break;
 			case 3:
-				new Login("admin");
+				new Login("admin",account);
 				break;
 			case 4:
+				new WelcomePage();
 				System.out.println("Thank you for visiting our store!!");
 				exit=false;
 				break;

@@ -1,3 +1,11 @@
+/*
+ * Application title : Online Footwear Shopping system
+ * Author            : F.Thahir Hussain
+ * Created on        : April 9 2022
+ * Last Modified date: April 18 2022
+ * Reviewed by       :
+ * Suggestions       :
+ */
 package com.shop;
 
 import java.util.Map;
@@ -5,22 +13,21 @@ import java.util.Scanner;
 import java.util.HashMap;
 
 import java.util.Stack;
-
+//It is used to do all notification related operations.
 public class Notification {
 
-	static Map<String, Stack<String>> customerNotifications = new HashMap<>();
-	static Map<String, Stack<String>> sellerNotifications = new HashMap<>();
-	static Map<String, Stack<String>> adminNotifications = new HashMap<>();
-	Scanner ob = new Scanner(System.in);
-
-	public void notificationMenu(String user,String userId) {
+	static Map<String, Stack<String>> customerNotifications = new HashMap<>();//Which stores customer Id with their notifications.
+	static Map<String, Stack<String>> sellerNotifications = new HashMap<>();//Which stores seller Id with their notifications.
+	static Map<String, Stack<String>> adminNotifications = new HashMap<>();//Which stores admin Id with their notifications.
+	Scanner scanner = new Scanner(System.in);
+    //It is used to show notification menu for Customer.
+	public void notificationMenuForCustomer(String userId) {
 		boolean exit = true;
 		System.out.println("\n**************Notification Bar***************\n");
-		if (user.equals("customer")) {
 			do {
 				System.out.println("\n1.Show notifications\n2.send notification to seller\n"
 						+ "3.send notification to admin\n4.delete notifications\n5.close\nEnter the choice: ");
-				int choice = ob.nextInt();
+				int choice = scanner.nextInt();
 				switch (choice) {
 				case 1:
 					showNotifications("customer",userId);
@@ -39,63 +46,69 @@ public class Notification {
 					break;
 				}
 			} while (exit);
-		} else if (user.equals("seller")) {
-			do {
-				System.out.println("\n1.Show notifications\n2.send notification to customer\n"
-						+ "3.send notification to admin\n4.delete notifications\n5.close\nEnter the choice: ");
-				int choice = ob.nextInt();
-				switch (choice) {
-				case 1:
-					showNotifications("seller",userId);
-					break;
-				case 2:
-					sendNotifications("customer");
-					break;
-				case 3:
-					sendNotifications("admin");
-					break;
-				case 4:
-					deleteNotifications("seller",userId);
-					break;
-				case 5:
-					exit = false;
-					break;
-				}
-			} while (exit);
-		} else if (user.equals("admin")) {
-			do {
-
-				System.out.println("\n1.Show notifications\n2.send notification to customer\n"
-						+ "3.send notification to seller\n4.delete notifications\n5.close\nEnter the choice: ");
-				int choice = ob.nextInt();
-				switch (choice) {
-				case 1:
-					showNotifications("admin",userId);
-					break;
-				case 2:
-					sendNotifications("customer");
-					break;
-				case 3:
-					sendNotifications("seller");
-					break;
-				case 4:
-					deleteNotifications("admin",userId);
-					break;
-				case 5:
-					exit = false;
-					break;
-				}
-			} while (exit);
 		}
+	//It is used to show notification menu for Seller.
+	public void notificationMenuForSeller(String userId) {
+		boolean exit = true;
+		System.out.println("\n**************Notification Bar***************\n");
+		do {
+			System.out.println("\n1.Show notifications\n2.send notification to customer\n"
+					+ "3.send notification to admin\n4.delete notifications\n5.close\nEnter the choice: ");
+			int choice = scanner.nextInt();
+			switch (choice) {
+			case 1:
+				showNotifications("seller",userId);
+				break;
+			case 2:
+				sendNotifications("customer");
+				break;
+			case 3:
+				sendNotifications("admin");
+				break;
+			case 4:
+				deleteNotifications("seller",userId);
+				break;
+			case 5:
+				exit = false;
+				break;
+			}
+		} while (exit);
+		} 
+	//It is used to show notification menu for Admin.
+	public void notificationMenuForAdmin(String userId) {
+		boolean exit = true;
+		System.out.println("\n**************Notification Bar***************\n");
+		do {
 
+			System.out.println("\n1.Show notifications\n2.send notification to customer\n"
+					+ "3.send notification to seller\n4.delete notifications\n5.close\nEnter the choice: ");
+			int choice = scanner.nextInt();
+			switch (choice) {
+			case 1:
+				showNotifications("admin",userId);
+				break;
+			case 2:
+				sendNotifications("customer");
+				break;
+			case 3:
+				sendNotifications("seller");
+				break;
+			case 4:
+				deleteNotifications("admin",userId);
+				break;
+			case 5:
+				exit = false;
+				break;
+			}
+		} while (exit);
 	}
-
+	//It is used to send the notification
 	public void sendNotifications(String user) {
 		System.out.println("Enter the " + user + " Id: ");
-		String userId = ob.next();
-		ob.nextLine();
+		String userId = scanner.next();
+		scanner.nextLine();
 		System.out.println("Enter the query to" + userId + ":");
-		String query = ob.nextLine();
+		String query = scanner.nextLine();
 		if (user.equals("customer")) {
 			customerNotifications.get(userId).add(query);
 		} else if (user.equals("seller")) {
@@ -105,7 +118,7 @@ public class Notification {
 		}
 		System.out.println("Notification was sent sucessfully!");
 	}
-
+	//It is used to show the notification
 	public void showNotifications(String user,String userId) {
 		
 		boolean customer = user.equals("customer") && customerNotifications.get(userId).isEmpty();
@@ -132,7 +145,7 @@ public class Notification {
 			}
 		}
 	}
-
+	//It is used to delete the notification
 	public void deleteNotifications(String user,String userId) {
 		if (user.equals("customer")) {
 			customerNotifications.get(userId).pop();

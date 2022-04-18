@@ -1,24 +1,32 @@
+/*
+ * Application title : Online Footwear Shopping system
+ * Author            : F.Thahir Hussain
+ * Created on        : April 9 2022
+ * Last Modified date: April 18 2022
+ * Reviewed by       :
+ * Suggestions       :
+ */
 package com.shop;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+//It is used to perform the Login operations
 class Login {
 	private String username = "";
 	private String password = "";
-	private String user;
+	private String user;//which type of user whether 'customer' , 'seller' and 'admin'
 	private int count=0;
-	private int set;
-	Accounts account = new Accounts();
+	private int set;//which is used to run the infinite loop till username or password was entered in correct format
+	Accounts account;//It is used to create account object for managing all accounts.
     
-
+    //It is used to check password with corresponding pattern.
 	public static boolean isValid(String regex, String credential) {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(credential);
 		return matcher.matches();
 	}
-
+    //It is used to check the user whether new user or already existing user.
 	public boolean checknewOrAlreadyExistingUser(String user, String username) {
 		boolean customer = user.equals("customer") && account.customersMap.containsKey(username);
 		boolean seller = user.equals("seller") && account.sellersMap.containsKey(username);
@@ -28,7 +36,7 @@ class Login {
 		}
 		return false;
 	}
-
+    //It is used to add username and password to corresponding objects(Customer, Seller and Admin) 
 	public void addToSystem(String user, String username, String password) {
 		if (user.equals("customer")) {
 			Customer customer = new Customer();
@@ -48,10 +56,12 @@ class Login {
 		}
 		System.out.println("Account was created successfully!!!");
 	}
-
-	public Login(String user) {
+    //This constructor is invoked whenever login operation is performed.
+	public Login(String user,Accounts account) {
+		this.account=account;
+		account.test();//for testing purpose.
 		this.user = user;
-		Scanner ob = new Scanner(System.in);
+		Scanner Scanner = new Scanner(System.in);
 		boolean exit = true;
 		do {
 			System.out.println("-------------------");
@@ -59,13 +69,13 @@ class Login {
 			System.out.println("--------------------");
 			int choice;
 			System.out.println("Enter the choice: ");
-			choice = ob.nextInt();
+			choice = Scanner.nextInt();
 			switch (choice) {
 			case 1:
 				set = 1;
 				while (set == 1) {
 					System.out.println("Enter the username: ");
-					username = ob.next();
+					username = Scanner.next();
 					String regex = "^(?=.*[0-9])" + "(?=.*[a-z])" + "(?=.*[A-Z]).{5,8}$";
 					if (isValid(regex, username)) {
 						if (checknewOrAlreadyExistingUser(user, username)) {
@@ -84,7 +94,7 @@ class Login {
 					System.out.println(
 							"Rules for Valid Password\n1.It contains at least 8 characters and at most 20 characters.\n2.It contains at least one digit,one lowercase alphabet,one upper case alphabet and one special character.\n3.It does not contain whitespace.");
 					System.out.println("\nEnter the password: ");
-					password = ob.next();
+					password = Scanner.next();
 					String regex = "^(?=.*[0-9])" + "(?=.*[a-z])(?=.*[A-Z])" + "(?=.*[@#$%^&+=])" + "(?=\\S+$).{8,20}$";
 					if (!isValid(regex, password)) {
 						System.out.println("Invalid Password format!.Try Again");
@@ -98,7 +108,7 @@ class Login {
 				set = 1;
 				while (set == 1) {
 					System.out.println("Username: ");
-					username = ob.next();
+					username = Scanner.next();
 					if (!this.checknewOrAlreadyExistingUser(user, username)) {
 						System.out.println("Invalid User!");
 						continue;
@@ -107,7 +117,7 @@ class Login {
 				}
 				while (set == 0) {
 					System.out.println("Password: ");
-					password = ob.next();
+					password = Scanner.next();
 					if (account.checkValidUser(user, username, password)) {
 						System.out.println("Login successfully!");
 						Home home=new Home(user,username,account);
@@ -125,19 +135,19 @@ class Login {
 		} while (exit);
 
 	}
-
+    //It is used to get the username from object(Customer, Seller and Admin)
 	public String getUsername() {
 		return username;
 	}
-
+	//It is used to set the  username from object(Customer, Seller and Admin)
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
+    //It is used to get the password from object(Customer, Seller and Admin)
 	public String getPassword() {
 		return password;
 	}
-
+	 //It is used to set the password from object(Customer, Seller and Admin)
 	public void setPassword(String password) {
 		this.password = password;
 	}

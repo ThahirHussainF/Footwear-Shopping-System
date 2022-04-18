@@ -1,7 +1,15 @@
+/*
+ * Application title : Online Footwear Shopping system
+ * Author            : F.Thahir Hussain
+ * Created on        : April 9 2022
+ * Last Modified date: April 18 2022
+ * Reviewed by       :
+ * Suggestions       :
+ */
 package com.shop;
 
 import java.util.Scanner;
-
+//It is a blue print class which holds all common properties among all users(customer,seller and  admin)
 public class User {
 
 	protected String firstName;
@@ -13,16 +21,16 @@ public class User {
 	protected int pincode;
 	protected String state;
 	protected String district;
-	public User() {
+	public void userDetails() {
 		System.out.println("\n******Registration******");
-		Scanner ob=new Scanner(System.in);
+		Scanner scanner=new Scanner(System.in);
 		System.out.println("Enter the First name: ");
-		this.firstName=ob.next();
+		this.firstName=scanner.next();
 		System.out.println("Enter the Last name: ");
-		this.lastName=ob.next();
+		this.lastName=scanner.next();
 		while(true) {
 			System.out.println("Enter the Email ID: ");
-			this.emailId=ob.next();
+			this.emailId=scanner.next();
 			String regex = "[a-z0-9]+@[a-z]+\\.[a-z]{2,3}";
 			if(Login.isValid(regex, this.emailId)) {
 				break;
@@ -32,7 +40,7 @@ public class User {
 		}
 		while(true) {
 			System.out.println("Enter the Phone Number: ");
-			this.phoneNumber=ob.next();
+			this.phoneNumber=scanner.next();
 			String regex = "(0/91)?[7-9][0-9]{9}";
 			if(Login.isValid(regex, this.phoneNumber)) {
 				break;
@@ -41,17 +49,17 @@ public class User {
 			}
 		}
 		System.out.println("Enter the Address: ");
-		ob.nextLine();
-		this.address=ob.nextLine();
+		scanner.nextLine();
+		this.address=scanner.nextLine();
 		System.out.println("Enter the District: ");
-		this.district=ob.next();
-		ob.nextLine();
+		this.district=scanner.next();
+		scanner.nextLine();
 		System.out.println("Enter the State: ");
-		this.state=ob.nextLine();
+		this.state=scanner.nextLine();
 		System.out.println("Enter the country: ");
-		this.country=ob.next();
+		this.country=scanner.next();
 		System.out.println("Enter the pincode");
-		this.pincode=ob.nextInt();
+		this.pincode=scanner.nextInt();
 	}
 
 	@Override
