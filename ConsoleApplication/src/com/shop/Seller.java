@@ -1,11 +1,4 @@
-/*
- * Application title : Online Footwear Shopping system
- * Author            : F.Thahir Hussain
- * Created on        : April 9 2022
- * Last Modified date: April 18 2022
- * Reviewed by       :
- * Suggestions       :
- */
+
 package com.shop;
 
 import java.util.Date;
@@ -38,10 +31,10 @@ public class Seller extends User {
 		System.out.println("***************Home*********************");
 		do {
 			System.out.println(
-					"\n1.Creating my new Shop\n2.Check the status of my shop"
-					+"\n3.Add the product\n4.update the product\n5.delete the product"
-					+ "\n6.Print the products\n7.Deleting my Shop"
-					+"\n8.Notifications\n9.Logout\nEnter your choice: ");
+					"\n1.Creating my new Shop\n2.Check the status of my shop\n3.Accept or deny order"
+					+"\n4.Add the product\n5.update the product\n6.delete the product"
+					+ "\n7.Print the products\n8.Accept or deny cancellation request\n9.Deleting my Shop"
+					+"\n10.Notifications\n11.Logout\nEnter your choice: ");
 			int choice = scanner.nextInt();
 			switch (choice) {
 			case 1:
@@ -51,24 +44,30 @@ public class Seller extends User {
 				this.checkStatusOfTheShop();
 				break;
 			case 3:
-				this.myShop.addProductToShop();;
+				this.myShop.acceptOrDenyOrder();
 				break;
 			case 4:
-				this.myShop.updateProductToShop();
+				this.myShop.addProductToShop();;
 				break;
 			case 5:
-				this.myShop.removeProductFromShop();
+				this.myShop.updateProductToShop();
 				break;
 			case 6:
-				this.myShop.printProducts();;
+				this.myShop.removeProductFromShop();
 				break;
 			case 7:
-				this.deleteShop();
+				this.myShop.printProducts();;
 				break;
 			case 8:
-				notification.notificationMenuForSeller(this.getSellerID());
+				this.myShop.performCancellation();
 				break;
 			case 9:
+				this.deleteShop();
+				break;
+			case 10:
+				notification.notificationMenuForSeller(this.getSellerID());
+				break;
+			case 11:
 				exit = false;
 				break;
 			}
@@ -125,9 +124,7 @@ public class Seller extends User {
 		}
 
 	}
-	public void addProduct() {
-		
-	}
+	
     //It is used to get the password from every seller object.
 	public String getPassword() {
 		return password;

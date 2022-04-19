@@ -3,6 +3,7 @@ package com.shop;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Stack;
 import java.util.HashMap;
 //It manages the all accounts(customer, seller, admin).
 class Accounts {
@@ -14,19 +15,24 @@ class Accounts {
   static Map<String,String> sellersMap=new HashMap<>();//It is used to store username and password for seller.
   static Map<String,String> adminMap=new HashMap<>();//It is used to store username and password for admin.
   static Map<String, Shop> shops = new HashMap<>();//which is used to store seller Id with corresponding shop object.
-
+  static Map<String,Order> orders=new HashMap<>();//which is used to keep track the orders.
+ 
   //for testing purpose
   public void test() {
+	  Customer customer=new Customer();
+	  customer.setUserName("Customer123");
+	  customer.setPassword("Customer@123");
 	  Seller seller=new Seller();
 	  seller.setShopName("Bismi Shoe Mart");
 	  seller.setShopAddress("Sholavandhan");
-	  seller.setUserName("Seller@123");
+	  seller.setUserName("Seller123");
 	  seller.setPassword("Seller@123");
 	  Shop shop=new Shop();
 	  shops.put(seller.getSellerID(),shop);
 	  seller.setMyShop(shop);
 	  shop.setShopName(seller.getShopName());
 	  shop.setShopStatus(1);
+	  shop.setSeller(seller);
 	  Map<Integer, Integer> sizeWithCountMap=new HashMap<>();
 	  sizeWithCountMap.put(6,4);
 	  sizeWithCountMap.put(7,5);
@@ -44,10 +50,12 @@ class Accounts {
 	  shop.addProductToShop(product5);
 	  shop.addProductToShop(product6);
 	  Admin admin=new Admin();
-	  admin.setUsername("Admin@123");
+	  admin.setUsername("Admin123");
 	  admin.setPassword("Admin@123");
 	  sellers.add(seller);
 	  admins.add(admin);
+	  customers.add(customer);
+	  customersMap.put(customer.getUserName(), customer.getPassword());
 	  sellersMap.put(seller.getUserName(),seller.getPassword());
 	  adminMap.put(admin.getUsername(),admin.getPassword());
   }

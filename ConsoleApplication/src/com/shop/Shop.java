@@ -1,18 +1,10 @@
-/*
- * Application title : Online Footwear Shopping system
- * Author            : F.Thahir Hussain
- * Created on        : April 9 2022
- * Last Modified date: April 18 2022
- * Reviewed by       :
- * Suggestions       :
- */
+
 package com.shop;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Date;
 
@@ -25,7 +17,9 @@ public class Shop {
 	private Seller seller;
 	private int shopStatus = 0;// 0 means not yet approval by admin, 1 means approval by admin, 2 mean denied
 								// by admin
+	boolean oneTimeCalling = true;
 	Map<String, Product> productMap = new HashMap<>();
+	Queue<Order> receivedOrders = new LinkedList<>();
 	Scanner scanner = new Scanner(System.in);
 
 	public Shop() {
@@ -39,21 +33,23 @@ public class Shop {
 		productMap.put(product.getProductId(), product);
 		System.out.println("Product " + product.getProductId() + " was added successfully!");
 	}
+
 	// It is used to add product to Shop object.
-		public void addProductToShop(Product product) {
-			productMap.put(product.getProductId(), product);
-		}
+	public void addProductToShop(Product product) {
+		productMap.put(product.getProductId(), product);
+	}
+
 	// It is used to remove product from Shop object.
 	public void removeProductFromShop() {
 		String productId;
 		do {
 			System.out.println("Enter the Product Id: ");
 			productId = scanner.next();
-			if(productMap.containsKey(productId)) {
+			if (productMap.containsKey(productId)) {
 				break;
 			}
 			System.out.println("Invalid product Id!");
-		}while(true);
+		} while (true);
 		for (Product product : productMap.values()) {
 			if (product.getProductId().equals(productId)) {
 				productMap.remove(productId);
@@ -71,11 +67,11 @@ public class Shop {
 		do {
 			System.out.println("Enter the Product Id: ");
 			productId = scanner.next();
-			if(productMap.containsKey(productId)) {
+			if (productMap.containsKey(productId)) {
 				break;
 			}
 			System.out.println("Invalid product Id!");
-		}while(true);
+		} while (true);
 		for (Product product : productMap.values()) {
 			if (product.getProductId().equals(productId)) {
 				boolean exit = true;
@@ -106,7 +102,7 @@ public class Shop {
 						System.out.println("Enter the size and number of Products: ");
 						size = scanner.nextInt();
 						noOfProductsAvailable = scanner.nextInt();
-						product.getEachSizeWithTheirCount().put(size,noOfProductsAvailable);
+						product.getEachSizeWithTheirCount().put(size, noOfProductsAvailable);
 						break;
 					case 4:
 						exit = false;
@@ -130,6 +126,64 @@ public class Shop {
 				System.out.println("\n***********************************************************");
 			}
 		}
+	}
+
+	public void loadOrder() {
+		for (Order order : Accounts.orders.values()) {
+			if (order.getSellerId().equals(this.getSeller().getSellerID())) {
+				this.receivedOrders.add(order);
+			}
+		}
+
+	}
+
+	public void acceptOrDenyOrder() {
+		if (this.oneTimeCalling) {
+			loadOrder();
+			this.oneTimeCalling = false;
+		}
+		if (this.receivedOrders.isEmpty()) {
+			System.out.println("There were no orders!");
+			return;
+		}
+		for (Order order : this.receivedOrders) {
+			System.out.println(order);
+			byte choice;
+			System.out.println("\n1.Accept\n2.Deny\nEnter your choice: ");
+			choice = scanner.nextByte();
+			if (choice == 1) {
+				order.setOrderStatus(choice);
+				System.out.println("Order was accepted successfully!");
+			} else {
+				order.setOrderStatus(choice);
+				System.out.println("Order was denied successfully!");
+			}
+			receivedOrders.remove();
+		}
+	}
+
+	public void performCancellation() {
+          for(Order order:Accounts.orders.values()) {
+        	  if(order.getCancellingOrderStatus()==1) {
+        		System.out.println(order);  
+        		byte choice;
+      			System.out.println("\n2.Accept\n3.Deny\nEnter your choice: ");
+      			choice = scanner.nextByte();
+      			if(choice==2) {
+      				order.setOrderStatus((byte)2);
+      				order.setCancellingOrderStatus(choice);
+      				Accounts.orders.remove(order.getOrderId());
+      				System.out.println("Cancelling request was accepted!");
+      				return;
+      			}
+      			else {
+      				order.setCancellingOrderStatus(choice);
+      				System.out.println("Cancelling request was denied!");
+      				return;
+      			}
+        	  }
+          }
+          System.out.println("There is no order for cancellation!");
 	}
 
 	// It is used to get shop Id from Shop object.

@@ -1,11 +1,4 @@
-/*
- * Application title : Online Footwear Shopping system
- * Author            : F.Thahir Hussain
- * Created on        : April 9 2022
- * Last Modified date: April 18 2022
- * Reviewed by       :
- * Suggestions       :
- */
+
 package com.shop;
 //It is used to go home page for corresponding user after the login operation is performed.
 public class Home {
@@ -14,7 +7,12 @@ public class Home {
     public Home(String user,String username,Accounts account) {
     	switch(user) {
     	case "customer":
-    		//on progress
+    		for(Customer customer:account.customers) {
+    			if(customer.getUserName().equals(username)) {
+    				customer.menu(notification);
+    				break;
+    			}
+    		}
     	  break;
     	case "seller":
     		for(Seller seller:account.sellers) {
