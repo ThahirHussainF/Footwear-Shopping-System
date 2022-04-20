@@ -18,6 +18,7 @@ public class Admin extends User {
 	static Queue<String> approvalQueueforDeletingShop = new LinkedList<>();//which is used to store all shop object for deleting shop to get approval from admin(First in First out).
 	Scanner scanner = new Scanner(System.in);
 	public Admin() {
+		//this.userDetails();
 		Date date = new Date();
 		this.adminId = "BS" + (date.getYear() + 1900) + "A" + id++;
 		Notification.adminNotifications.put(this.getAdminId(),new Stack<String>());
@@ -28,8 +29,8 @@ public class Admin extends User {
 		System.out.println("***************Home*********************");
 		do {
 			System.out.println(
-					"\n1.Approval for creating shop\n2.Approval for deleting shop\n3.Notifications\n4.Logout\nEnter your choice: ");
-			int choice = scanner.nextInt();
+					"\n1.Approval for creating shop\n2.Approval for deleting shop\n3.Notifications\n4.Logout");
+			int choice = Management.checkValidityOfChoice();
 			switch (choice) {
 			case 1:
 				this.approvalAndRejectionOperartionPerformedForCreatingShop();
@@ -43,6 +44,9 @@ public class Admin extends User {
 			case 4:
 				exit = false;
 				break;
+			default:
+				System.out.print("Please enter the valid choice!");
+				break;	
 			}
 
 		} while (exit);
@@ -85,13 +89,13 @@ public class Admin extends User {
 		}
 		System.out.println("Shops waiting for Deletion:");
 		for (String shopId : this.approvalQueueforDeletingShop) {
-              for(Map.Entry<String, Shop> sellerWithShop:Accounts.shops.entrySet()) {
+              for(Map.Entry<String, Shop> sellerWithShop:Storage.shops.entrySet()) {
             	Shop shop=sellerWithShop.getValue();
             	System.out.println(shop);
             	System.out.println("\n1.Approval\n2.Denial\nEnter your status: ");
       			int status = scanner.nextInt();
       			if(status==1) {
-      				Accounts.shops.remove(sellerWithShop.getKey());
+      				Storage.shops.remove(sellerWithShop.getKey());
     				Notification.sellerNotifications.get(shop.getSeller().getSellerID()).add("Your shop was deleted sucessfully!");
     				System.out.println("Request was accepted!");
     			}

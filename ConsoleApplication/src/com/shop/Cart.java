@@ -18,7 +18,7 @@ public class Cart {
 		this.footwearSize = footwearSize;
 		this.noOfFootwear = noOfFootwear;
 		this.customerId=customerId;
-		for(Seller seller:Accounts.sellers) {
+		for(Seller seller:Storage.sellers) {
 			if(seller.getMyShop().getShopId().equals(shopId)) {
 				this.sellerId=seller.getSellerID();
 				break;
@@ -95,7 +95,7 @@ public class Cart {
 	@Override
 	public String toString() {
 		return "\nCart Id = "+cartId+"\nShop Id =" + shopId +"\nProduct Id =" + productId + "\nFootwear size =" + footwearSize
-				+ "\nnoOfFootwear = " + noOfFootwear +"\nAmount per product = "+(amount/noOfFootwear)+"\nTotal amount Calculated =" + amount;
+				+ "\nnoOfFootwear = " + noOfFootwear +"\nAmount per product = "+String.format("%.2f",(amount/noOfFootwear))+"\nTotal amount Calculated =" +String.format("%.2f",amount);
 	}
 
 }

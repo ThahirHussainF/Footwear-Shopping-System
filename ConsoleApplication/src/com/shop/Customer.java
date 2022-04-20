@@ -18,7 +18,7 @@ public class Customer extends User {
 	Scanner scanner = new Scanner(System.in);
 
 	public Customer() {
-		// super();
+		this.userDetails();
 		Date d = new Date();
 		this.customerId = "BS" + (d.getYear() + 1900) + "C" + id++;
 		Notification.customerNotifications.put(this.getCustomerId(), new Stack<String>());
@@ -31,7 +31,7 @@ public class Customer extends User {
 		do {
 			System.out.println(
 					"\n1.Add product to cart\n2.Print products from cart\n3.Remove Product from cart\n4.Make Purchase\n5.Check the order status\n6.Cancel the order\n7.Notifications\n8.Exit");
-			int choice = scanner.nextInt();
+			int choice =  Management.checkValidityOfChoice();
 			switch (choice) {
 			case 1:
 				this.addProductToCart();
@@ -57,6 +57,9 @@ public class Customer extends User {
 			case 8:
 				exit = false;
 				break;
+			default:
+				System.out.print("Please enter the valid choice!");
+				break;	
 			}
 
 		} while (exit);
@@ -72,7 +75,7 @@ public class Customer extends User {
 		while (true) {
 			System.out.println("Enter the shop ID: ");
 			shopId = scanner.next();
-			for (Shop shop : Accounts.shops.values()) {
+			for (Shop shop : Storage.shops.values()) {
 				if (shop.getShopId().equals(shopId)) {
 					validProductId = shop;
 					set = false;
@@ -126,7 +129,7 @@ public class Customer extends User {
 
 	public double priceCalculation(Cart cart) {
 		double amount = 0.0;
-		for (Shop shop : Accounts.shops.values()) {
+		for (Shop shop : Storage.shops.values()) {
 			if (shop.getShopId().equals(cart.getShopId())) {
 				for (Product product : shop.productMap.values()) {
 					if (product.getProductId().equals(cart.getProductId())) {
@@ -157,7 +160,7 @@ public class Customer extends User {
 				break;
 			}
 		}
-		Accounts.orders.put(order.getOrderId(), order);
+		Storage.orders.put(order.getOrderId(), order);
 		System.out.println("You product was orderd sucessfully!");
 		this.cartMap.remove(cartId);
 		this.myOrders.add(order);
@@ -216,8 +219,8 @@ public class Customer extends User {
 		   System.out.println("Enter the order ID: ");
 		   orderId=scanner.next();
 		 
-		   if(Accounts.orders.containsKey(orderId)) {
-			   Order order=Accounts.orders.get(orderId);
+		   if(Storage.orders.containsKey(orderId)) {
+			   Order order=Storage.orders.get(orderId);
 			  if(order.getCancellingOrderStatus()==1) {
 				   System.out.println("Your request was already sent to seller!");
 				   return;
@@ -259,7 +262,7 @@ public class Customer extends User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+    
 	@Override // It was used to print details whenever we print customer object.
 	public String toString() {
 		return "\nCustomer Id: " + this.customerId + super.toString();

@@ -4,7 +4,7 @@ package com.shop;
 public class Home {
     private String user;
     Notification notification=new Notification();//It is used to create notification object for all user objects.
-    public Home(String user,String username,Accounts account) {
+    public Home(String user,String username,Storage account) {
     	switch(user) {
     	case "customer":
     		for(Customer customer:account.customers) {

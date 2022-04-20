@@ -13,14 +13,14 @@ public class Seller extends User {
 	private String shopAddress;
 	private String password;
 	private String userName;
-	private Shop myShop;//It will store shop object for each seller.
+	private Shop myShop=null;//It will store shop object for each seller.
 	Scanner scanner = new Scanner(System.in);
 	public Seller() {
-		//this.userDetails();
-//		System.out.println("Enter the shop name: ");
-//		this.shopName = scanner.nextLine();
-//		System.out.println("Enter the shop address: ");
-//		this.shopAddress = scanner.nextLine();
+		this.userDetails();
+		System.out.println("Enter the shop name: ");
+		this.shopName = scanner.nextLine();
+		System.out.println("Enter the shop address: ");
+		this.shopAddress = scanner.nextLine();
 		Date d = new Date();
 		this.sellerID = "BS" + (d.getYear() + 1900) + "S" + id++;
 		Notification.sellerNotifications.put(this.getSellerID(), new Stack<String>());
@@ -34,8 +34,8 @@ public class Seller extends User {
 					"\n1.Creating my new Shop\n2.Check the status of my shop\n3.Accept or deny order"
 					+"\n4.Add the product\n5.update the product\n6.delete the product"
 					+ "\n7.Print the products\n8.Accept or deny cancellation request\n9.Deleting my Shop"
-					+"\n10.Notifications\n11.Logout\nEnter your choice: ");
-			int choice = scanner.nextInt();
+					+"\n10.Notifications\n11.Logout");
+			int choice =  Management.checkValidityOfChoice();
 			switch (choice) {
 			case 1:
 				this.createShop();
@@ -44,21 +44,33 @@ public class Seller extends User {
 				this.checkStatusOfTheShop();
 				break;
 			case 3:
+				if(!this.isShopExist(this.myShop)) break;
+				if(!this.isActiveShop()) break;
 				this.myShop.acceptOrDenyOrder();
 				break;
 			case 4:
+				if(!this.isShopExist(this.myShop)) break;
+				if(!this.isActiveShop()) break;
 				this.myShop.addProductToShop();;
 				break;
 			case 5:
+				if(!this.isShopExist(this.myShop)) break;
+				if(!this.isActiveShop()) break;
 				this.myShop.updateProductToShop();
 				break;
 			case 6:
+				if(!this.isShopExist(this.myShop)) break;
+				if(!this.isActiveShop()) break;
 				this.myShop.removeProductFromShop();
 				break;
 			case 7:
+				if(!this.isShopExist(this.myShop)) break;
+				if(!this.isActiveShop()) break;
 				this.myShop.printProducts();;
 				break;
 			case 8:
+				if(!this.isShopExist(this.myShop)) break;
+				if(!this.isActiveShop()) break;
 				this.myShop.performCancellation();
 				break;
 			case 9:
@@ -70,6 +82,9 @@ public class Seller extends User {
 			case 11:
 				exit = false;
 				break;
+			default:
+				System.out.print("Please enter the valid choice!");
+				break;	
 			}
 
 		} while (exit);
@@ -82,11 +97,19 @@ public class Seller extends User {
 		shop.setSeller(this);
 		shop.setShopName(shopName);
 		this.setMyShop(shop);
-		Accounts.shops.put(this.getSellerID(), shop);
+		Storage.shops.put(this.getSellerID(), shop);
 		Admin.approvalOrRejectionOfShops(shop);
 		System.out.println(this.myShop.toString());
 		System.out.println("please waiting for approval from admin...........");
 		
+	}
+	//check if shop is exist or not 
+	boolean isShopExist(Shop myShop) {
+		if(myShop==null) {
+			System.out.println("Shop does not exist!");
+			return false;
+		}
+		return true;
 	}
 	//It is used to create the shop for each seller object.
 	public void checkStatusOfTheShop() {
@@ -94,8 +117,8 @@ public class Seller extends User {
 			System.out.println("There is no shop linked with this account!");
 			return;
 		}
-		if (Accounts.shops.containsKey(this.getSellerID())) {
-			Shop shop = Accounts.shops.get(this.sellerID);
+		if (Storage.shops.containsKey(this.getSellerID())) {
+			Shop shop = Storage.shops.get(this.sellerID);
 			int status = shop.getShopStatus();
 			if (status == 0) {
 				System.out.println("Your shop was not yet approved!");
@@ -112,11 +135,7 @@ public class Seller extends User {
 	public void deleteShop() {
 		System.out.println("Enter the shopId to delete");
 		String shopId = scanner.next();
-		if (Accounts.shops.containsKey(this.getSellerID())) {
-			if(Accounts.shops.get(this.getSellerID()).getShopStatus()==0) {
-				System.out.println("Your shop was not yet approved.You can't delete the shop.");
-				return;
-			}
+		if (Storage.shops.containsKey(this.getSellerID())) {
 			Admin.approvalQueueforDeletingShop.add(shopId);
 			System.out.println("let us contact you as soon as possible......");
 		} else {
@@ -124,7 +143,13 @@ public class Seller extends User {
 		}
 
 	}
-	
+	public boolean isActiveShop() {
+		if(this.myShop.getShopStatus()==1) {
+			return true;
+		}
+		System.out.println("Your shop was not yet approved by admin!");
+		return false;
+	}
     //It is used to get the password from every seller object.
 	public String getPassword() {
 		return password;

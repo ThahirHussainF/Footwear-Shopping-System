@@ -129,7 +129,7 @@ public class Shop {
 	}
 
 	public void loadOrder() {
-		for (Order order : Accounts.orders.values()) {
+		for (Order order : Storage.orders.values()) {
 			if (order.getSellerId().equals(this.getSeller().getSellerID())) {
 				this.receivedOrders.add(order);
 			}
@@ -163,7 +163,7 @@ public class Shop {
 	}
 
 	public void performCancellation() {
-          for(Order order:Accounts.orders.values()) {
+          for(Order order:Storage.orders.values()) {
         	  if(order.getCancellingOrderStatus()==1) {
         		System.out.println(order);  
         		byte choice;
@@ -172,7 +172,7 @@ public class Shop {
       			if(choice==2) {
       				order.setOrderStatus((byte)2);
       				order.setCancellingOrderStatus(choice);
-      				Accounts.orders.remove(order.getOrderId());
+      				Storage.orders.remove(order.getOrderId());
       				System.out.println("Cancelling request was accepted!");
       				return;
       			}
