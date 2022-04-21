@@ -41,7 +41,7 @@ public class Loginpage {
 		boolean exit = true;
 		do {
 			System.out.println("-------------------");
-			System.out.println("1.Register\n2.Login\n3.Unlock account\n4.Exit");
+			System.out.println("1.Register\n2.Login\n3.Unlock account\n4.Forgot Password\n5.Exit");
 			System.out.println("--------------------");
 			int choice;
 			choice = Security.validateChoice();
@@ -54,9 +54,18 @@ public class Loginpage {
 			case 2:
 				new UserLogin().doLogin(user);
 				break;
+			//Unlock user account	
 			case 3:
-				//on progress
+				Security.unLockUserAccount(user);
+				System.out.println("Please update your password!");
+				Security.updatePassword(user);
+                break;
+            //Update the password    
 			case 4:
+				Security.updatePassword(user);
+				break;
+			//Exit Condition	
+			case 5:
 				exit=false;
 				break;
 			}
