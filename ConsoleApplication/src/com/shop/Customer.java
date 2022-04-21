@@ -10,16 +10,21 @@ import java.util.Stack;
 //It is used to perform all operations for customer.
 public class Customer extends User {
 	private static byte id = 1;
-	private String customerId;//It stores Customer Id
-	private String userName;//It stores user name
-	private String password;//It stores password
-	Map<String, Cart> cartMap = new HashMap<>();//It stores cart id and cart object.
-	Stack<Order> myOrders = new Stack<>();//It stores order object.
+	private String customerId;// It stores Customer Id
+	private String userName;// It stores user name
+	private String password;// It stores password
+	private byte accountStatus;// 1-active,2-locked
+	private byte passwordLoginAttempts;// only 3 attempts
+	Map<String, Cart> cartMap = new HashMap<>();// It stores cart id and cart object.
+	Stack<Order> myOrders = new Stack<>();// It stores order object.
 	Scanner scanner = new Scanner(System.in);
-    //It has invoked whenever new customer has registered.
+
+	// It has invoked whenever new customer has registered.
 	public Customer() {
-		//this.getUserDetails();
-		this.customerId = "BS" +  Calendar.getInstance().get(Calendar.YEAR) + "C" + id++;
+		// this.getUserDetails();
+		this.setAccountStatus((byte)1);
+		this.setPasswordLoginAttempts((byte)3);
+		this.customerId = "BS" + Calendar.getInstance().get(Calendar.YEAR) + "C" + id++;
 		Storage.customerNotifications.put(this.getCustomerId(), new Stack<String>());
 	}
 
@@ -32,54 +37,55 @@ public class Customer extends User {
 					"\n1.Add product to cart\n2.Print products from cart\n3.Remove Product from cart\n4.Make Purchase\n5.Check the order status\n6.Cancel the order\n7.Notifications\n8.Exit");
 			int choice = Security.validateChoice();
 			switch (choice) {
-			//Add product to cart
+			// Add product to cart
 			case 1:
 				this.addProductToCart();
 				break;
-			//Print products from cart	
+			// Print products from cart
 			case 2:
 				this.printProductsFromCart();
 				break;
-			//Remove Product from cart	
+			// Remove Product from cart
 			case 3:
 				this.removeProductFromCart();
 				break;
-			//Make Purchase	
+			// Make Purchase
 			case 4:
 				this.makePurchase();
 				break;
-			//Check the order status	
+			// Check the order status
 			case 5:
 				this.checkOrderStatus();
 				break;
-			//Cancel the order	
+			// Cancel the order
 			case 6:
 				this.cancelOrder();
 				break;
-			//Notification Bar	
+			// Notification Bar
 			case 7:
 				notification.showNotificationMenuForCustomer(this.getCustomerId());
 				break;
-			//Exit Condition	
+			// Exit Condition
 			case 8:
 				exit = false;
 				break;
-			//Invaild choice	
+			// Invaild choice
 			default:
 				System.out.print("Please enter the valid choice!");
-				break;	
+				break;
 			}
 
 		} while (exit);
 	}
-    //It is used to add product to cart object.
+
+	// It is used to add product to cart object.
 	public void addProductToCart() {
 		String shopId;
 		String productId;
 		int footwearSize;
 		int noOfFootwear;
 		Shop validProductId = null;// checking vaild product id
-		boolean set=true;// checking vaild details
+		boolean set = true;// checking vaild details
 		while (true) {
 			System.out.println("Enter the shop ID: ");
 			shopId = scanner.next();
@@ -113,7 +119,8 @@ public class Customer extends User {
 		cartMap.put(cart.getCartId(), cart);
 		System.out.println("Product was added to cart sucessfully!");
 	}
-    //It is used to remove product from cart object.
+
+	// It is used to remove product from cart object.
 	public void removeProductFromCart() {
 		if (cartMap.isEmpty()) {
 			System.out.println("No items were added to cart!");
@@ -134,7 +141,8 @@ public class Customer extends User {
 			}
 		}
 	}
-    //It is used to calculate total amount purchased by customer.
+
+	// It is used to calculate total amount purchased by customer.
 	public double calculatePrice(Cart cart) {
 		double amount = 0.0;
 		for (Shop shop : Storage.shopsMap.values()) {
@@ -148,7 +156,8 @@ public class Customer extends User {
 		}
 		return amount;
 	}
-    //It is used to perform purchasing.
+
+	// It is used to perform purchasing.
 	public void makePurchase() {
 		if (cartMap.isEmpty()) {
 			System.out.println("No items were added to cart!");
@@ -174,7 +183,8 @@ public class Customer extends User {
 		this.myOrders.add(order);
 
 	}
-    //It is used to print products from cart.
+
+	// It is used to print products from cart.
 	public void printProductsFromCart() {
 		if (cartMap.isEmpty()) {
 			System.out.println("No items were present!");
@@ -187,13 +197,14 @@ public class Customer extends User {
 			System.out.println("-----------------------------------------------------------------");
 		}
 	}
-    //It is used to check the order status
+
+	// It is used to check the order status
 	public void checkOrderStatus() {
 		if (this.myOrders.isEmpty()) {
 			System.out.println("There is no order!");
 		}
 		for (Order order : this.myOrders) {
-			if(order.getCancellingOrderStatus()==0) {
+			if (order.getCancellingOrderStatus() == 0) {
 				if (order.getOrderStatus() == 0) {
 					System.out.println(order + "\nRemark: " + "Your order is not yet viewed by seller!");
 				} else if (order.getOrderStatus() == 1) {
@@ -201,47 +212,48 @@ public class Customer extends User {
 				} else {
 					System.out.println(order + "\nRemark: " + "Your order was denied!");
 				}
-			}
-			else {
-				if(order.getCancellingOrderStatus()==1) {
+			} else {
+				if (order.getCancellingOrderStatus() == 1) {
 					System.out.println(order + "\nRemark: " + "Your cancelling request is not yet viewed by seller!");
-				}else if(order.getCancellingOrderStatus()==2) {
+				} else if (order.getCancellingOrderStatus() == 2) {
 					System.out.println(order + "\nRemark: " + "Your cancelling request was accepted!");
-				} else if(order.getCancellingOrderStatus()==3) {
+				} else if (order.getCancellingOrderStatus() == 3) {
 					System.out.println(order + "\nRemark: " + "Your cancelling request was denied!");
 				}
 			}
 		}
 	}
-   //It is used to cancel the order.	
-   public void cancelOrder() {
-	   int count=3;//avoiding infinite loop
-	   if(myOrders.isEmpty()) {
-		   System.out.println("You did not order any products!");
-		   return;
-	   }
-	   for(Order order:myOrders) {
-		   System.out.println(order);
-	   }
-	   while(count!=0) {
-		   String orderId;
-		   System.out.println("Enter the order ID: ");
-		   orderId=scanner.next();
-		 
-		   if(Storage.ordersMap.containsKey(orderId)) {
-			   Order order=Storage.ordersMap.get(orderId);
-			  if(order.getCancellingOrderStatus()==1) {
-				   System.out.println("Your request was already sent to seller!");
-				   return;
-			   }
-			   order.setCancellingOrderStatus((byte)1);
-			   System.out.println("Your request was sent to seller!.");
-			   break;
-		   }
-		   System.out.println("You entered wrong order Id!");
-		   count--;
-	   }
-   }
+
+	// It is used to cancel the order.
+	public void cancelOrder() {
+		int count = 3;// avoiding infinite loop
+		if (myOrders.isEmpty()) {
+			System.out.println("You did not order any products!");
+			return;
+		}
+		for (Order order : myOrders) {
+			System.out.println(order);
+		}
+		while (count != 0) {
+			String orderId;
+			System.out.println("Enter the order ID: ");
+			orderId = scanner.next();
+
+			if (Storage.ordersMap.containsKey(orderId)) {
+				Order order = Storage.ordersMap.get(orderId);
+				if (order.getCancellingOrderStatus() == 1) {
+					System.out.println("Your request was already sent to seller!");
+					return;
+				}
+				order.setCancellingOrderStatus((byte) 1);
+				System.out.println("Your request was sent to seller!.");
+				break;
+			}
+			System.out.println("You entered wrong order Id!");
+			count--;
+		}
+	}
+
 	// It is used to get the customer Id.
 	public String getCustomerId() {
 		return customerId;
@@ -271,8 +283,33 @@ public class Customer extends User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-    
-	@Override // It was used to print customer details whenever we print customer object has printed.
+
+	// It is used to get the password login attempts.
+	public byte getPasswordLoginAttempts() {
+		return passwordLoginAttempts;
+	}
+
+	// It is used to set the password login attempts.
+	public void setPasswordLoginAttempts(byte passwordLoginAttempts) {
+		this.passwordLoginAttempts = passwordLoginAttempts;
+	}
+
+	// It is used to get account status.
+	public byte getAccountStatus() {
+		return accountStatus;
+	}
+
+	// It is used to set account status.
+	public void setAccountStatus(byte accountStatus) {
+		this.accountStatus = accountStatus;
+	}
+	// It is used to decrement the login attempt by 1 whenever customer will submit
+	// incorrect password.
+	public void decrementLoginAttempt() {
+		this.passwordLoginAttempts--;
+	}
+	@Override // It was used to print customer details whenever we print customer object has
+				// printed.
 	public String toString() {
 		return "\nCustomer Id: " + this.customerId + super.toString();
 	}

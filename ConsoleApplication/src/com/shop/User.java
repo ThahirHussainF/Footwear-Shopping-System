@@ -16,9 +16,8 @@ public class User {
 	protected int pincode;// It stores pincode.
 	protected String state;// It stores state name
 	protected String district;// It stores district name.
-	protected byte accountStatus = 1;// 1-active,2-locked
-	protected byte passwordLoginAttempts = 3;// only 3 attempts
 	Scanner scanner = new Scanner(System.in);
+
 	// It is used get the user details.
 	public void getUserDetails() {
 		String emailRegex = "[a-z.]+[0-9.]*@[a-z]+\\.[a-z]{2,3}";// for email validation
@@ -111,25 +110,6 @@ public class User {
 
 	}
 
-	// It is used to get the password login attempts.
-	public byte getPasswordLoginAttempts() {
-		return passwordLoginAttempts;
-	}
-
-	// It is used to set the password login attempts.
-	public void setPasswordLoginAttempts(byte passwordLoginAttempts) {
-		this.passwordLoginAttempts = passwordLoginAttempts;
-	}
-
-	// It is used to get account status.
-	public byte getAccountStatus() {
-		return accountStatus;
-	}
-
-	// It is used to set account status.
-	public void setAccountStatus(byte accountStatus) {
-		this.accountStatus = accountStatus;
-	}
 	// It was used to print user details whenever we print user object.
 	@Override
 	public String toString() {

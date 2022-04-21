@@ -20,6 +20,7 @@ class UserLogin {
 				break;
 			}
 			if(!Security.isAccountActive(user, userName)) {
+				System.out.println(Security.isAccountActive(user, userName));
 				System.out.println("Your account was Locked!");
 				return;
 			}

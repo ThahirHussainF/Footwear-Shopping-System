@@ -44,11 +44,11 @@ public class Security {
 	// incorrect password.
 	public static void doDecrementLoginAttempt(String user, String userName) {// user means "CUSTOMER","SELLER","ADMIN"
 		if (user.equals("customer")) {
-			Storage.customersMap.get(userName).passwordLoginAttempts--;
+			Storage.customersMap.get(userName).decrementLoginAttempt();;
 		} else if (user.equals("seller")) {
-			Storage.sellersMap.get(userName).passwordLoginAttempts--;
+			Storage.sellersMap.get(userName).decrementLoginAttempt();;
 		} else if (user.equals("admin")) {
-			Storage.adminsMap.get(userName).passwordLoginAttempts--;
+			Storage.adminsMap.get(userName).decrementLoginAttempt();;
 		}
 
 	}
@@ -110,6 +110,10 @@ public class Security {
 		userName = scanner.next();
 		if (!Security.isNewOrExistingUser(user, userName)) {
 			System.out.println("Your account does not exist!");
+			return;
+		}
+		if(Security.isAccountActive(user, userName)) {
+			System.out.println("Your account was active!");
 			return;
 		}
 		System.out.println("Enter your " + user + " Id");

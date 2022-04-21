@@ -7,12 +7,16 @@ import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Stack;
+
 ////It is used to perform all operations related to Admin.
 public class Admin extends User {
 	private String username;// It stores user name.
 	private String password;// It stores password
 	private static byte id = 1;
 	private String adminId;// It stores admin ID.
+	private byte accountStatus;// 1-active,2-locked
+	private byte passwordLoginAttempts;// only 3 attempts
+
 	static Queue<Shop> approvalQueueforCreatingShop = new LinkedList<>();// which is used to store all shop object for
 																			// creating shop to get approval from
 																			// admin(First in First out).
@@ -24,6 +28,9 @@ public class Admin extends User {
 	// It was invoked whenever new admin was registered.
 	public Admin() {
 		this.getUserDetails();
+		this.setAccountStatus((byte) 1);
+		this.setPasswordLoginAttempts((byte) 3);
+
 		this.adminId = "BS" + Calendar.getInstance().get(Calendar.YEAR) + "A" + id++;
 		Storage.adminNotifications.put(this.getAdminId(), new Stack<String>());
 	}
@@ -142,6 +149,32 @@ public class Admin extends User {
 	// It is used to set the admin Id to admin object.
 	public void setAdminId(String adminId) {
 		this.adminId = adminId;
+	}
+
+	// It is used to get the password login attempts.
+	public byte getPasswordLoginAttempts() {
+		return passwordLoginAttempts;
+	}
+
+	// It is used to set the password login attempts.
+	public void setPasswordLoginAttempts(byte passwordLoginAttempts) {
+		this.passwordLoginAttempts = passwordLoginAttempts;
+	}
+
+	// It is used to get account status.
+	public byte getAccountStatus() {
+		return accountStatus;
+	}
+
+	// It is used to set account status.
+	public void setAccountStatus(byte accountStatus) {
+		this.accountStatus = accountStatus;
+	}
+
+	// It is used to decrement the login attempt by 1 whenever admin will submit
+	// incorrect password.
+	public void decrementLoginAttempt() {
+		this.passwordLoginAttempts--;
 	}
 
 }

@@ -71,6 +71,7 @@ final class Storage {
 			customer.setPassword(password);
 			customersList.add(customer);
 			customersMap.put(customer.getUserName(), customer);
+			System.out.println(customer.getAccountStatus());
 			System.out.println("Your customer Id  was "+customer.getCustomerId());
 		} else if (user.equals("seller")) {
 			Seller seller = new Seller();
