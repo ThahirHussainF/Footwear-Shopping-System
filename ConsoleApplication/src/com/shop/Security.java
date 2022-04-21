@@ -7,7 +7,8 @@ import java.util.regex.Pattern;
 
 //It is used to provide operations such as password changing,locking, unlocking and validating user credentials.
 public class Security {
-	Scanner scanner = new Scanner(System.in);
+
+	static Scanner scanner = new Scanner(System.in);
 
 	// It is used to check details with corresponding pattern.
 	public static boolean isValidPattern(String regex, String credential) {
@@ -102,21 +103,72 @@ public class Security {
 	}
 
 	// It is used to unlock the user account.
-	public static void unLockUserAccount(String user, String userName) {// user means "CUSTOMER","SELLER","ADMIN"
-		if (user.equals("customer")) {
-			Storage.customersMap.get(userName).setAccountStatus((byte) 1);
-		} else if (user.equals("seller")) {
-			Storage.sellersMap.get(userName).setAccountStatus((byte) 1);
-		} else if (user.equals("admin")) {
-			Storage.adminsMap.get(userName).setAccountStatus((byte) 1);
+	public static void unLockUserAccount(String user) {// user means "CUSTOMER","SELLER","ADMIN"
+		String userName = "";
+		String userId;
+		System.out.println("Enter your user name: ");
+		userName = scanner.next();
+		if (!Security.isNewOrExistingUser(user, userName)) {
+			System.out.println("Your account does not exist!");
+			return;
 		}
+		System.out.println("Enter your " + user + " Id");
+		userId = scanner.next();
+		if (user.equals("customer") && Storage.customersMap.get(userName).getCustomerId().equals(userId)) {
+			Storage.customersMap.get(userName).setAccountStatus((byte) 1);
+		} else if (user.equals("seller") && Storage.sellersMap.get(userName).getSellerID().equals(userId)) {
+			Storage.sellersMap.get(userName).setAccountStatus((byte) 1);
+		}
+		System.out.println("Your account was unlocked!");
+	}
+
+	// Update the new Password
+	public static void updatePassword(String user) {
+		String userName = "";
+		String password;
+		String reEnterPassword;
+		System.out.println("Enter your user name: ");
+		userName = scanner.next();
+		if (!Security.isNewOrExistingUser(user, userName)) {
+			System.out.println("Your account does not exist!");
+			return;
+		}
+		if (user.equals("customer") && Security.isAccountActive(user, userName)) {
+			Customer customer = Storage.customersMap.get(userName);
+			System.out.println("Enter new password: ");
+			password = scanner.next();
+			do {
+				System.out.println("Re-enter new password: ");
+				reEnterPassword = scanner.next();
+				if (password.equals(reEnterPassword)) {
+					customer.setPassword(reEnterPassword);
+					System.out.println("Your password was updated successfully!");
+					return;
+				}
+				System.out.println("Both password does match!");
+			} while (true);
+		} else if (user.equals("seller") && Security.isAccountActive(user, userName)) {
+			Seller seller = Storage.sellersMap.get(userName);
+			System.out.println("Enter new password: ");
+			password = scanner.next();
+			do {
+				System.out.println("Re-enter new password: ");
+				reEnterPassword = scanner.next();
+				if (password.equals(reEnterPassword)) {
+					seller.setPassword(reEnterPassword);
+					System.out.println("Your password was updated successfully!");
+					return;
+				}
+				System.out.println("Both password does match!");
+			} while (true);
+		} 
+		
 	}
 
 	// It is used to validate the choice in all menus(customer,seller, admin) which
 	// is also handle 'InputMisMatchException'.
 	public static int validateChoice() {
 		int choice = 0;
-		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter your choice:");
 		do {
 			try {
