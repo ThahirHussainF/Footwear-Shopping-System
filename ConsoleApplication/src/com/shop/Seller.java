@@ -1,5 +1,5 @@
 
-package com.shop;
+package com.footwearShop;
 
 import java.util.Calendar;
 import java.util.Scanner;
@@ -215,7 +215,7 @@ public class Seller extends User {
 	public void setMyShop(Shop myShop) {
 		this.myShop = myShop;
 	}
-	//It was used to print seller details whenever we print seller object.
+	//It is used to print seller details whenever we print seller object.
 	public String toString() {
 		return "\nSeller Id: " + this.sellerID + "\nShop Name: " + this.shopName + "\nShop address: " + this.shopAddress
 				+ super.toString();

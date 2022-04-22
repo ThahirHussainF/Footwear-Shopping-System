@@ -1,5 +1,5 @@
 
-package com.shop;
+package com.footwearShop;
 
 import java.util.Scanner;
 
@@ -34,7 +34,6 @@ class UserLogin {
 				if (Security.isValidUser(user, userName, password)) {
 					System.out.println("Login successfully!");
 					new Home(user,userName);//Go to home page
-					Security.doResetLoginAttempt(user, userName);
 					return;
 				}
 				System.out.println("Invalid password!.Try Again!");

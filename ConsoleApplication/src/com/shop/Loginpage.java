@@ -1,5 +1,5 @@
 
-package com.shop;
+package com.footwearShop;
 //It is used to navigate the login accounts for all users(customer, seller, admin)
 public class Loginpage {
 
@@ -57,8 +57,6 @@ public class Loginpage {
 			//Unlock user account	
 			case 3:
 				Security.unLockUserAccount(user);
-				System.out.println("Please update your password!");
-				Security.updatePassword(user);
                 break;
             //Update the password    
 			case 4:

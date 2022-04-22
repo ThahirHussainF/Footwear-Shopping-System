@@ -1,5 +1,5 @@
 
-package com.shop;
+package com.footwearShop;
 
 import java.util.Map;
 import java.util.Queue;

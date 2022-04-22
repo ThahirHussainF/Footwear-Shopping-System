@@ -1,5 +1,5 @@
 
-package com.shop;
+package com.footwearShop;
 
 import java.util.Calendar;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class Admin extends User {
 																			// admin(First in First out).
 	Scanner scanner = new Scanner(System.in);
 
-	// It was invoked whenever new admin was registered.
+	// It is invoked whenever new admin was registered.
 	public Admin() {
 		this.getUserDetails();
 		this.adminId = "BS" + Calendar.getInstance().get(Calendar.YEAR) + "A" + id++;

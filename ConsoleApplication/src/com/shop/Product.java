@@ -1,5 +1,5 @@
 
-package com.shop;
+package com.footwearShop;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +96,7 @@ public void setBrandName(String brand) {
 	this.brandName = brand;
 }
 @Override
-//It was used to print product details whenever we print product object.
+//It is used to print product details whenever we print product object.
 public String toString() {
 	return "\nproductId=" + productId + "\nproductName=" + productName + "\ncategory=" + category
 			+ "\nbrandName=" + brandName + "\neachSizeWithTheirCount=" + eachSizeWithTheirCount.toString() + "\nprice=" + price;

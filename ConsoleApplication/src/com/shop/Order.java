@@ -1,4 +1,4 @@
-package com.shop;
+package com.footwearShop;
 
 import java.util.List;
 import java.sql.Timestamp;
@@ -88,7 +88,7 @@ public class Order {
 	public void setCancellingOrderStatus(byte cancellingOrderStatus) {
 		this.cancellingOrderStatus = cancellingOrderStatus;
 	}
-    //It was used to print order details whenever we print order object.
+    //It is used to print order details whenever we print order object.
 	@Override
 	public String toString() {
 		return "\n***********Order Details***********" + "\nOrder Id : "+orderId + "\nCustomer Id : " + customerId + "\nSeller Id : " + sellerId + "\nOrdered date : "

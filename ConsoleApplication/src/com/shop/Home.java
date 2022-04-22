@@ -1,5 +1,5 @@
 
-package com.shop;
+package com.footwearShop;
 //It is used to go home page for corresponding user after the login operation is performed.
 public class Home {
     Notification notification=new Notification();//It is used to create notification object for all users.

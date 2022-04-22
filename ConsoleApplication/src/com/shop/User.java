@@ -1,5 +1,5 @@
 
-package com.shop;
+package com.footwearShop;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -130,7 +130,7 @@ public class User {
 	public void setAccountStatus(byte accountStatus) {
 		this.accountStatus = accountStatus;
 	}
-	// It was used to print user details whenever we print user object.
+	// It is used to print user details whenever we print user object.
 	@Override
 	public String toString() {
 		return "\nName: " + this.firstName + " " + this.lastName + "\nEmail Id: " + this.emailId + "\nPhone Number: "

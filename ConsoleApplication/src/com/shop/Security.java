@@ -1,4 +1,4 @@
-package com.shop;
+package com.footwearShop;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -7,9 +7,7 @@ import java.util.regex.Pattern;
 
 //It is used to provide operations such as password changing,locking, unlocking and validating user credentials.
 public class Security {
-
 	static Scanner scanner = new Scanner(System.in);
-
 	// It is used to check details with corresponding pattern.
 	public static boolean isValidPattern(String regex, String credential) {
 		Pattern pattern = Pattern.compile(regex);
@@ -116,10 +114,20 @@ public class Security {
 		userId = scanner.next();
 		if (user.equals("customer") && Storage.customersMap.get(userName).getCustomerId().equals(userId)) {
 			Storage.customersMap.get(userName).setAccountStatus((byte) 1);
+			System.out.println(Storage.customersMap.get(userName).getAccountStatus());
 		} else if (user.equals("seller") && Storage.sellersMap.get(userName).getSellerID().equals(userId)) {
 			Storage.sellersMap.get(userName).setAccountStatus((byte) 1);
+		} else if (user.equals("admin") && Storage.adminsMap.get(userName).getAdminId().equals(userId)) {
+			Storage.sellersMap.get(userName).setAccountStatus((byte) 1);
+		}  	else {
+			System.out.println("Your " + user + " Id was Incorrect!");
+			return;
 		}
+
 		System.out.println("Your account was unlocked!");
+		System.out.println("Please update your password!");
+		Security.updatePassword(user);
+		Security.doResetLoginAttempt(user, userName);
 	}
 
 	// Update the new Password
@@ -137,9 +145,11 @@ public class Security {
 			Customer customer = Storage.customersMap.get(userName);
 			System.out.println("Enter new password: ");
 			password = scanner.next();
+			password=UserRegister.validatePasword(userName, password);
 			do {
 				System.out.println("Re-enter new password: ");
 				reEnterPassword = scanner.next();
+				reEnterPassword=UserRegister.validatePasword(userName, reEnterPassword);
 				if (password.equals(reEnterPassword)) {
 					customer.setPassword(reEnterPassword);
 					System.out.println("Your password was updated successfully!");
@@ -161,10 +171,9 @@ public class Security {
 				}
 				System.out.println("Both password does match!");
 			} while (true);
-		} 
-		
-	}
+		}
 
+	}
 	// It is used to validate the choice in all menus(customer,seller, admin) which
 	// is also handle 'InputMisMatchException'.
 	public static int validateChoice() {

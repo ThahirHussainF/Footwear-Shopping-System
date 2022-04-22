@@ -1,4 +1,4 @@
-package com.shop;
+package com.footwearShop;
 
 //store the product details for buying
 public class Cart {
@@ -90,7 +90,7 @@ public class Cart {
 	public void setSellerId(String sellerId) {
 		this.sellerId = sellerId;
 	}
-	// It was used to print cart details whenever we print cart object has printed.
+	// It is used to print cart details whenever we print cart object has printed.
 	@Override
 	public String toString() {
 		return "\nCart Id = "+cartId+"\nShop Id =" + shopId +"\nProduct Id =" + productId + "\nFootwear size =" + footwearSize

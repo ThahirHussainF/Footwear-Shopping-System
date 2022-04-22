@@ -1,4 +1,4 @@
-package com.shop;
+package com.footwearShop;
 
 import java.util.List;
 import java.util.ArrayList;

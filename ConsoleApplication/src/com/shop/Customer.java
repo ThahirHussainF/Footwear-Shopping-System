@@ -1,5 +1,5 @@
 
-package com.shop;
+package com.footwearShop;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -16,9 +16,8 @@ public class Customer extends User {
 	Map<String, Cart> cartMap = new HashMap<>();//It stores cart id and cart object.
 	Stack<Order> myOrders = new Stack<>();//It stores order object.
 	Scanner scanner = new Scanner(System.in);
-    //It has invoked whenever new customer has registered.
+    //It is invoked whenever new customer has registered.
 	public Customer() {
-		//this.getUserDetails();
 		this.customerId = "BS" +  Calendar.getInstance().get(Calendar.YEAR) + "C" + id++;
 		Storage.customerNotifications.put(this.getCustomerId(), new Stack<String>());
 	}

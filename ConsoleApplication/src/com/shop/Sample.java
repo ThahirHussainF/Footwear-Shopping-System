@@ -1,4 +1,4 @@
-package com.shop;
+package com.footwearShop;
  class Sample {
 	public static void main(String[] args) {
 		int a=10;
