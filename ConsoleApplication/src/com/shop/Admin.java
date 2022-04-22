@@ -38,10 +38,10 @@ public class Admin extends User {
 			int choice = Security.validateChoice();
 			switch (choice) {
 			case 1:
-				this.performShopApprovalOrRejectionForCreatingShop();
+				this.isCreateShop();
 				break;
 			case 2:
-				this.performShopApprovalOrRejectionForDeletingShop();
+				this.isDeleteShop();
 				break;
 			case 3:
 				notification.showNotificationMenuForAdmin(this.getAdminId());
@@ -58,7 +58,7 @@ public class Admin extends User {
 	}
 
 	// It is used to give approval/denial to seller for creating shop through admin.
-	public void performShopApprovalOrRejectionForCreatingShop() {
+	public void isCreateShop() {
 		if (Admin.approvalQueueforCreatingShop.isEmpty()) {
 			System.out.println("No shops were waiting for Creation!");
 			return;
@@ -84,7 +84,7 @@ public class Admin extends User {
 	}
 
 	// It is used to give approval/denial to seller for deleting shop through admin.
-	public void performShopApprovalOrRejectionForDeletingShop() {
+	public void isDeleteShop() {
 		if (approvalQueueforDeletingShop.isEmpty()) {
 			System.out.println("No shops were waiting for Deletion!");
 			return;
