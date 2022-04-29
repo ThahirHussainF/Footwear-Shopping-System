@@ -5,7 +5,7 @@ public class WelcomePage {
     public WelcomePage(Storage storage){
     	
     	System.out.println("*************************************************************************************");
-    	System.out.println("***********************"+"WELCOME TO BISMI FOOTWEAR MART"+"********************************");
+    	System.out.println("***********************WELCOME TO BISMI FOOTWEAR MART********************************");
     	System.out.println("*************************************************************************************");
     	
     	for(Shop shop:Storage.shopsMap.values()) {
